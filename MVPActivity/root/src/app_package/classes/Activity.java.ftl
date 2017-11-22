@@ -1,49 +1,42 @@
-package ${packageName}.view.impl;
+package ${packageName};
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import ${packageName}.R;
-import ${packageName}.view.${viewClass};
-import ${packageName}.presenter.loader.PresenterFactory;
-import ${packageName}.presenter.${presenterClass};
-import ${packageName}.injection.AppComponent;
-import ${packageName}.injection.${moduleClass};
 import ${packageName}.injection.Dagger${componentClass};
+import ${packageName}.injection.${moduleClass};
+import ${packageName}.viewmodel.${viewModelClass};
 
 import javax.inject.Inject;
 
-public final class ${activityClass} extends BaseActivity<${presenterClass}, ${viewClass}> implements ${viewClass}
-{
+public class ${activityClass}
+        extends BaseActivity<${viewModelClass}, ${contractClass}.View, ${contractClass}.Presenter>
+        implements ${contractClass}.View {
+
     @Inject
-    PresenterFactory<${presenterClass}> mPresenterFactory;
-
-    // Your presenter is available using the mPresenter variable
+    ${contractClass}.Presenter injectPresenter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.${layoutName});
-
-        // Your code here
-        // Do not call mPresenter from here, it will be null! Wait for onStart or onPostCreate.
-    }
-
-    @Override
-    protected void setupComponent(@NonNull AppComponent parentComponent) 
-    {
+    public void inject(@NotNull AppComponent appComponent) {
         Dagger${componentClass}.builder()
-            .appComponent(parentComponent)
-            .${moduleClass?uncap_first}(new ${moduleClass}())
-            .build()
-            .inject(this);
+                .appComponent(appComponent)
+                .${moduleClass?uncap_first}(new ${moduleClass}())
+                .build()
+                .inject(this);
     }
 
-    @NonNull
     @Override
-    protected PresenterFactory<${presenterClass}> getPresenterFactory()
-    {
-        return mPresenterFactory;
+    public int getLayoutResId() {
+        return R.layout.${layoutName};
+    }
+
+    @NotNull
+    @Override
+    public ${contractClass}.Presenter createPresenter() {
+        return injectPresenter;
+    }
+
+    @Override
+    public void onViewModelChanged(${viewModelClass} viewModel) {
+        //TODO implements here
     }
 }

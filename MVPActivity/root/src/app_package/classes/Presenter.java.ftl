@@ -1,8 +1,13 @@
-package ${packageName}.presenter;
+package ${packageName};
 
-import ${packageName}.view.${viewClass};
+import ${packageName}.viewmodel.${viewModelClass};
 
-public interface ${presenterClass} extends BasePresenter<${viewClass}>
-{
-	
+public class ${presenterClass}
+        extends BasePresenter<${viewModelClass}, ${contractClass}.View>
+        implements ${contractClass}.Presenter {
+
+    @Override
+    public ${viewModelClass} defaultViewModel() {
+        return new ${viewModelClass}();
+    }
 }
